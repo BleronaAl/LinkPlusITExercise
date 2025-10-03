@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>React Basics</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="data-container"></div>
+
+    <script src="https://unpkg.com/supersimpledev@3.2.1/react.js"></script>
+    <script src="https://unpkg.com/supersimpledev@3.2.1/react-dom.js"></script>
+    <script src="https://unpkg.com/supersimpledev/dayjs.js"></script>
+
+    <script src="https://unpkg.com/supersimpledev@3.2.1/babel.js"></script>
+    <script type="text/babel">
+
+        const params = new URLSearchParams(window.location.search);
+        const index = Number(params.get("index"));
+
+        function Web() {
+          const [users, setUsers] = React.useState(() => {
+          const saved = localStorage.getItem("users");
+          return saved ? JSON.parse(saved) : [];
+        });
+
+        React.useEffect(() => {
+          localStorage.setItem("users", JSON.stringify(users));
+        }, [users]);
+        
+        console.log(users);
+
+              return(
+            <>
+              <img class="userPhoto" src="Profile.png" width="100"/>
+              <App 
+                users={users}
+                setUsers={setUsers}
+              />
+            </>
+            );
+            }
+
+        function UserCard({ name , email , company, phone , website }) {         
+
+        return (
+          <div class="userCard">
+             <p>Name: {name}</p>
+             <p>Email: {email}</p>
+             <p>Company: {company}</p>
+            <p>Phone: {phone}</p>
+            <p>Website: {website}</p>
+            <button id="editInfo">Edit</button>
+          </div>
+        );
+       }
+
+       function NotAUser() {
+        return (
+          <div class="userCard">
+             <p>Error: We don't have a user with that name!</p>
+          </div>
+        );
+       }
+
+        function App({users, setUsers }) {
+            const user = users[index];
+
+            if(index === -1 || index == null) {
+               return (
+            <>
+              {
+                  <NotAUser />
+              }
+            </>
+            );
+            } else {
+
+
+           return (
+            <>
+              {
+                    <UserCard 
+                      name = {user.name}
+                      email = {user.email}
+                      company = {user.company.name}
+                      phone = {user.phone}
+                      website = {user.website}
+                      key = {user.id}
+                    />
+                  
+              }
+            </>
+          );
+          }
+        }
+      
+        
+    
+      const container = document.querySelector('.data-container');
+      const root = ReactDOM.createRoot(container);
+      root.render(<Web />);
+    </script>
+  </body>
+</html>
+
